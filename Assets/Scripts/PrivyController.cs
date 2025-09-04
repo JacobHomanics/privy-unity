@@ -1,7 +1,6 @@
 using UnityEngine;
 using Privy;
 using System.Threading.Tasks;
-using System.Collections;
 
 public class PrivyController : MonoBehaviour
 {
@@ -15,8 +14,6 @@ public class PrivyController : MonoBehaviour
 
     void Start()
     {
-
-
         var config = new PrivyConfig
         {
             AppId = appId,
