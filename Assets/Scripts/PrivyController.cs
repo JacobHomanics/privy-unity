@@ -12,6 +12,9 @@ public class PrivyController : MonoBehaviour
 
     public UnityEvent onSuccess;
     public UnityEvent onFailure;
+
+    public UnityEvent<string> onSendCodeCaughtError;
+
     public UnityEvent onError;
 
     void Start()
@@ -29,34 +32,38 @@ public class PrivyController : MonoBehaviour
 #elif UNITY_WEBGL
             ClientId = webClientId
 #endif
-
         };
 
         PrivyManager.Initialize(config);
     }
 
-    struct PrivySendCodeExceptions
+    struct PrivyExceptionHandlerData
     {
         public string identifier;
         public string message;
+        public string type;
     }
 
-    readonly PrivySendCodeExceptions[] privySendCodeExceptions = new PrivySendCodeExceptions[]{
+    readonly PrivyExceptionHandlerData[] privySendCodeExceptionHandlersData = new PrivyExceptionHandlerData[]{
         new() {
             identifier = "has not been set as an allowed app identifier in the Privy dashboard",
-            message = "Please add the app identifier to the Privy dashboard."
+            message = "Please add the app identifier to the Privy dashboard.",
+            type = "LogWarning"
         },
         new() {
             identifier = "Invalid Privy app ID",
-            message = "Invalid Privy app ID."
+            message = "Invalid Privy app ID.",
+            type = "LogWarning"
         },
         new() {
             identifier = "Invalid app client ID",
-            message = "Invalid App Client ID."
+            message = "Invalid App Client ID.",
+            type = "LogWarning"
         },
         new() {
             identifier = "Invalid email address",
-            message = "Invalid Email Address."
+            message = "Invalid Email Address.",
+            type = "CaughtEvent"
         }
     };
 
@@ -72,11 +79,16 @@ public class PrivyController : MonoBehaviour
         catch (Exception e)
         {
             bool isErrorAccountedFor = false;
-            for (var i = 0; i < privySendCodeExceptions.Length; i++)
+            for (var i = 0; i < privySendCodeExceptionHandlersData.Length; i++)
             {
-                if (e.Message.Contains(privySendCodeExceptions[i].identifier))
+                if (e.Message.Contains(privySendCodeExceptionHandlersData[i].identifier))
                 {
-                    Debug.LogWarning(privySendCodeExceptions[i].message);
+                    if (privySendCodeExceptionHandlersData[i].type == "LogWarning")
+                        Debug.LogWarning(privySendCodeExceptionHandlersData[i].message);
+
+                    if (privySendCodeExceptionHandlersData[i].type == "CaughtEvent")
+                        onSendCodeCaughtError?.Invoke(privySendCodeExceptionHandlersData[i].message);
+
                     isErrorAccountedFor = true;
                     break;
                 }
@@ -96,19 +108,13 @@ public class PrivyController : MonoBehaviour
     public UnityEvent onLoginWithCodeError;
     public UnityEvent<string> onLoginWithCodeCaughtError;
 
-    struct PrivyLoginWithCodeExceptions
-    {
-        public string identifier;
-        public string message;
-    }
-
-    readonly PrivyLoginWithCodeExceptions[] privyLoginWithCodeExceptions = new PrivyLoginWithCodeExceptions[]{
+    readonly PrivyExceptionHandlerData[] privyLoginWithCodeExceptionHandlersData = new PrivyExceptionHandlerData[]{
         new() {
             identifier = "Invalid email and code combination",
-            message = "Invalid or expired verification code."
+            message = "Invalid or expired verification code.",
+            type = "CaughtEvent"
         }
     };
-
 
     public async Task LoginWithCode(string email, string code)
     {
@@ -136,12 +142,18 @@ public class PrivyController : MonoBehaviour
         {
             bool isErrorAccountedFor = false;
 
-            for (var i = 0; i < privyLoginWithCodeExceptions.Length; i++)
+            for (var i = 0; i < privyLoginWithCodeExceptionHandlersData.Length; i++)
             {
-                if (e.Message.Contains(privyLoginWithCodeExceptions[i].identifier))
+                if (e.Message.Contains(privyLoginWithCodeExceptionHandlersData[i].identifier))
                 {
                     isErrorAccountedFor = true;
-                    onLoginWithCodeCaughtError?.Invoke(privyLoginWithCodeExceptions[i].message);
+
+                    if (privyLoginWithCodeExceptionHandlersData[i].type == "LogWarning")
+                        Debug.LogWarning(privyLoginWithCodeExceptionHandlersData[i].message);
+
+                    if (privyLoginWithCodeExceptionHandlersData[i].type == "CaughtEvent")
+                        onLoginWithCodeCaughtError?.Invoke(privyLoginWithCodeExceptionHandlersData[i].message);
+
                     break;
                 }
             }
