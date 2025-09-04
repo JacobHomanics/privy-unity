@@ -476,7 +476,6 @@ MonoBehaviour:
   appId: 
   webClientId: 
   mobileClientId: 
-  clientId: 
 --- !u!4 &137667785
 Transform:
   m_ObjectHideFlags: 0

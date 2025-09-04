@@ -1,19 +1,23 @@
 using UnityEngine;
 using Privy;
 using System.Threading.Tasks;
+using CandyCoded.env;
 
 public class PrivyController : MonoBehaviour
 {
-    public TextAsset environmentVariables;
+    private string appId;
 
-    public string appId;
-
-    public string webClientId;
-    public string mobileClientId;
-
+    private string webClientId;
+    private string mobileClientId;
 
     void Start()
     {
+        env.TryParseEnvironmentVariable("PRIVY_APP_ID", out string appId);
+
+        env.TryParseEnvironmentVariable("PRIVY_WEB_CLIENT_ID", out string webClientId);
+
+        env.TryParseEnvironmentVariable("PRIVY_MOBILE_CLIENT_ID", out string mobileClientId);
+
         var config = new PrivyConfig
         {
             AppId = appId,
