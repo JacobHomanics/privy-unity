@@ -7,11 +7,6 @@ using UnityEngine.Events;
 
 public class PrivyController : MonoBehaviour
 {
-    private string appId;
-
-    private string webClientId;
-    private string mobileClientId;
-
     public UnityEvent onSuccess;
     public UnityEvent onFailure;
     public UnityEvent onError;
@@ -19,9 +14,7 @@ public class PrivyController : MonoBehaviour
     void Start()
     {
         env.TryParseEnvironmentVariable("PRIVY_APP_ID", out string appId);
-
         env.TryParseEnvironmentVariable("PRIVY_WEB_CLIENT_ID", out string webClientId);
-
         env.TryParseEnvironmentVariable("PRIVY_MOBILE_CLIENT_ID", out string mobileClientId);
 
         var config = new PrivyConfig
@@ -39,21 +32,30 @@ public class PrivyController : MonoBehaviour
         PrivyManager.Initialize(config);
     }
 
-    public async Awaitable<bool> SendCodeAwaitable(string email)
+    struct PrivySendCodeExceptions
     {
-        bool success = await PrivyManager.Instance.Email.SendCode(email);
-        return success;
+        public string identifier;
+        public string warning;
     }
 
-    // public async Task<bool> SendCodeAsync(string email)
-    // {
-    //     bool success = await PrivyManager.Instance.Email.SendCode(email);
-    //     return success;
-    // }
-
-    string appIdentifierException = "has not been set as an allowed app identifier in the Privy dashboard";
-    string invalidClientIdException = "Invalid app client ID";
-    string invalidEmailAddressException = "Invalid email address";
+    readonly PrivySendCodeExceptions[] privySendCodeExceptions = new PrivySendCodeExceptions[]{
+        new() {
+            identifier = "has not been set as an allowed app identifier in the Privy dashboard",
+            warning = "Please add the app identifier to the Privy dashboard."
+        },
+        new() {
+            identifier = "Invalid Privy app ID",
+            warning = "Invalid Privy app ID."
+        },
+        new() {
+            identifier = "Invalid app client ID",
+            warning = "Invalid App Client ID."
+        },
+        new() {
+            identifier = "Invalid email address",
+            warning = "Invalid Email Address."
+        }
+    };
 
     public async Task SendCode(string email)
     {
@@ -61,35 +63,23 @@ public class PrivyController : MonoBehaviour
         {
             bool success = await PrivyManager.Instance.Email.SendCode(email);
 
-            Debug.Log(success);
             if (success) onSuccess?.Invoke();
             else onFailure?.Invoke();
         }
         catch (Exception e)
         {
-            if (e.Message.Contains(invalidClientIdException))
+            for (var i = 0; i < privySendCodeExceptions.Length; i++)
             {
-                Debug.LogWarning("Invalid App Client ID.");
-            }
-
-            else if (e.Message.Contains(appIdentifierException))
-            {
-                Debug.Log(Application.identifier);
-                Debug.LogWarning("Please add the app identifier to the Privy dashboard.");
-            }
-            else if (e.Message.Contains(invalidEmailAddressException))
-            {
-                Debug.LogWarning("Invalid Email Address.");
-            }
-            else
-            {
-                Debug.Log(e.Message);
+                if (e.Message.Contains(privySendCodeExceptions[i].identifier))
+                {
+                    Debug.LogWarning(privySendCodeExceptions[i].warning);
+                    break;
+                }
             }
 
             onError?.Invoke();
         }
     }
-
 
     public async Task<AuthState> LoginWithCodeAsync(string email, string code)
     {
