@@ -2,6 +2,8 @@ using UnityEngine;
 using Privy;
 using System.Threading.Tasks;
 using CandyCoded.env;
+using System;
+using UnityEngine.Events;
 
 public class PrivyController : MonoBehaviour
 {
@@ -9,6 +11,10 @@ public class PrivyController : MonoBehaviour
 
     private string webClientId;
     private string mobileClientId;
+
+    public UnityEvent onSuccess;
+    public UnityEvent onFailure;
+    public UnityEvent onError;
 
     void Start()
     {
@@ -39,11 +45,51 @@ public class PrivyController : MonoBehaviour
         return success;
     }
 
-    public async Task<bool> SendCodeAsync(string email)
+    // public async Task<bool> SendCodeAsync(string email)
+    // {
+    //     bool success = await PrivyManager.Instance.Email.SendCode(email);
+    //     return success;
+    // }
+
+    string appIdentifierException = "has not been set as an allowed app identifier in the Privy dashboard";
+    string invalidClientIdException = "Invalid app client ID";
+    string invalidEmailAddressException = "Invalid email address";
+
+    public async Task SendCode(string email)
     {
-        bool success = await PrivyManager.Instance.Email.SendCode(email);
-        return success;
+        try
+        {
+            bool success = await PrivyManager.Instance.Email.SendCode(email);
+
+            Debug.Log(success);
+            if (success) onSuccess?.Invoke();
+            else onFailure?.Invoke();
+        }
+        catch (Exception e)
+        {
+            if (e.Message.Contains(invalidClientIdException))
+            {
+                Debug.LogWarning("Invalid App Client ID.");
+            }
+
+            else if (e.Message.Contains(appIdentifierException))
+            {
+                Debug.Log(Application.identifier);
+                Debug.LogWarning("Please add the app identifier to the Privy dashboard.");
+            }
+            else if (e.Message.Contains(invalidEmailAddressException))
+            {
+                Debug.LogWarning("Invalid Email Address.");
+            }
+            else
+            {
+                Debug.Log(e.Message);
+            }
+
+            onError?.Invoke();
+        }
     }
+
 
     public async Task<AuthState> LoginWithCodeAsync(string email, string code)
     {
