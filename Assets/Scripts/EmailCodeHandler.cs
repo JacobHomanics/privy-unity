@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Privy;
 using TMPro;
@@ -7,11 +6,18 @@ using UnityEngine.Events;
 
 public class EmailCodeHandler : MonoBehaviour
 {
+    private static WaitForSeconds _waitForSeconds1 = new(1f);
     public TMP_InputField emailInputField;
     public TMP_InputField codeInputField;
     public TMP_Text userWalletText;
 
+    public PrivyController controller;
+
+    public TMP_Text messageText;
+
     public UnityEvent onCodeEntered;
+
+    public UnityEvent onDelaySuccess;
 
     void Update()
     {
@@ -22,74 +28,41 @@ public class EmailCodeHandler : MonoBehaviour
         }
     }
 
-    public PrivyController controller;
-
-    public UnityEvent onSuccess;
-    public UnityEvent onFailure;
-    public UnityEvent onError;
-
-    string invalidEmailAndCodeCombinationException = "Invalid email and code combination";
     public async void LoginWithCode()
     {
-        try
-        {
-            var result = await controller.LoginWithCodeAsync(emailInputField.text, codeInputField.text);
-
-            if (result == AuthState.Authenticated)
-            {
-                var privyUser = await PrivyManager.Instance.GetUser();
-
-                if (privyUser.EmbeddedWallets.Length == 0)
-                {
-                    await privyUser.CreateWallet();
-                }
-
-                userWalletText.text = privyUser.EmbeddedWallets[0].Address;
-                StartCoroutine(ShowMessage("Succesfully logged in!", Color.green));
-                StartCoroutine(DelaySuccess());
-            }
-            else onFailure?.Invoke();
-        }
-        catch (Exception e)
-        {
-
-            string userErrorMessage = "Invalid or expired verification code.";
-
-            if (e.Message.Contains(invalidEmailAndCodeCombinationException))
-            {
-                Debug.LogWarning("Invalid Email and code combination.");
-                StartCoroutine(ShowMessage(userErrorMessage, Color.red));
-                StartCoroutine(DelayTextReset());
-                StartCoroutine(DelayScriptEnable());
-            }
-            else
-            {
-                Debug.Log(e.Message);
-            }
-
-            // Debug.Log(e);
-            onError?.Invoke();
-        }
+        await controller.LoginWithCode(emailInputField.text, codeInputField.text);
     }
 
-    public TMP_Text messageText;
+    public void OnSuccess(PrivyUser user)
+    {
+        userWalletText.text = user.EmbeddedWallets[0].Address;
+        StartCoroutine(ShowMessage("Succesfully logged in!", Color.green));
+        StartCoroutine(DelaySuccess());
+    }
+
+    public void OnCaughtError(string message)
+    {
+        StartCoroutine(ShowMessage(message, Color.red));
+        StartCoroutine(DelayTextReset());
+        StartCoroutine(DelayScriptEnable());
+    }
 
     private IEnumerator DelayScriptEnable()
     {
-        yield return new WaitForSeconds(1f);
+        yield return _waitForSeconds1;
         this.enabled = true;
     }
 
     private IEnumerator DelayTextReset()
     {
-        yield return new WaitForSeconds(1f);
+        yield return _waitForSeconds1;
         codeInputField.text = "";
     }
 
     private IEnumerator DelaySuccess()
     {
-        yield return new WaitForSeconds(1f);
-        onSuccess?.Invoke();
+        yield return _waitForSeconds1;
+        onDelaySuccess?.Invoke();
     }
 
     private IEnumerator ShowMessage(string message, Color color)
@@ -97,7 +70,7 @@ public class EmailCodeHandler : MonoBehaviour
         messageText.gameObject.SetActive(true);
         messageText.text = message;
         messageText.color = color;
-        yield return new WaitForSeconds(1f);
+        yield return _waitForSeconds1;
         messageText.gameObject.SetActive(false);
     }
 }

@@ -7,6 +7,9 @@ using UnityEngine.Events;
 
 public class PrivyController : MonoBehaviour
 {
+    [Header("Configuration")]
+    public bool createWalletOnLogin;
+
     public UnityEvent onSuccess;
     public UnityEvent onFailure;
     public UnityEvent onError;
@@ -35,25 +38,25 @@ public class PrivyController : MonoBehaviour
     struct PrivySendCodeExceptions
     {
         public string identifier;
-        public string warning;
+        public string message;
     }
 
     readonly PrivySendCodeExceptions[] privySendCodeExceptions = new PrivySendCodeExceptions[]{
         new() {
             identifier = "has not been set as an allowed app identifier in the Privy dashboard",
-            warning = "Please add the app identifier to the Privy dashboard."
+            message = "Please add the app identifier to the Privy dashboard."
         },
         new() {
             identifier = "Invalid Privy app ID",
-            warning = "Invalid Privy app ID."
+            message = "Invalid Privy app ID."
         },
         new() {
             identifier = "Invalid app client ID",
-            warning = "Invalid App Client ID."
+            message = "Invalid App Client ID."
         },
         new() {
             identifier = "Invalid email address",
-            warning = "Invalid Email Address."
+            message = "Invalid Email Address."
         }
     };
 
@@ -68,42 +71,87 @@ public class PrivyController : MonoBehaviour
         }
         catch (Exception e)
         {
+            bool isErrorAccountedFor = false;
             for (var i = 0; i < privySendCodeExceptions.Length; i++)
             {
                 if (e.Message.Contains(privySendCodeExceptions[i].identifier))
                 {
-                    Debug.LogWarning(privySendCodeExceptions[i].warning);
+                    Debug.LogWarning(privySendCodeExceptions[i].message);
+                    isErrorAccountedFor = true;
                     break;
                 }
+            }
+
+            if (!isErrorAccountedFor)
+            {
+                Debug.LogError(e.Message);
             }
 
             onError?.Invoke();
         }
     }
 
-    public async Task<AuthState> LoginWithCodeAsync(string email, string code)
+    public UnityEvent<PrivyUser> onLoginWithCodeSuccess;
+    public UnityEvent onLoginWithCodeFailure;
+    public UnityEvent onLoginWithCodeError;
+    public UnityEvent<string> onLoginWithCodeCaughtError;
+
+    struct PrivyLoginWithCodeExceptions
     {
-        var result = await PrivyManager.Instance.Email.LoginWithCode(email, code);
-        return result;
+        public string identifier;
+        public string message;
     }
 
-    public async Task GetAuthState()
+    readonly PrivyLoginWithCodeExceptions[] privyLoginWithCodeExceptions = new PrivyLoginWithCodeExceptions[]{
+        new() {
+            identifier = "Invalid email and code combination",
+            message = "Invalid or expired verification code."
+        }
+    };
+
+
+    public async Task LoginWithCode(string email, string code)
     {
-        var authState = await PrivyManager.Instance.GetAuthState();
-
-        switch (authState)
+        try
         {
-            case AuthState.Authenticated:
-                // User is authenticated. Grab the user's linked accounts
+            var result = await PrivyManager.Instance.Email.LoginWithCode(email, code);
+
+            if (result == AuthState.Authenticated)
+            {
                 var privyUser = await PrivyManager.Instance.GetUser();
-                var linkedAccounts = privyUser.LinkedAccounts;
-                break;
-            case AuthState.Unauthenticated:
-                // User is not authenticated.
-                Debug.Log("User is currently logged out.");
 
-                break;
+                if (createWalletOnLogin)
+                {
+                    if (privyUser.EmbeddedWallets.Length == 0)
+                    {
+                        await privyUser.CreateWallet();
+                    }
+                }
 
+                onLoginWithCodeSuccess?.Invoke(privyUser);
+            }
+            else onLoginWithCodeFailure?.Invoke();
+        }
+        catch (Exception e)
+        {
+            bool isErrorAccountedFor = false;
+
+            for (var i = 0; i < privyLoginWithCodeExceptions.Length; i++)
+            {
+                if (e.Message.Contains(privyLoginWithCodeExceptions[i].identifier))
+                {
+                    isErrorAccountedFor = true;
+                    onLoginWithCodeCaughtError?.Invoke(privyLoginWithCodeExceptions[i].message);
+                    break;
+                }
+            }
+
+            if (!isErrorAccountedFor)
+            {
+                Debug.LogError(e.Message);
+            }
+
+            onLoginWithCodeError?.Invoke();
         }
     }
 }

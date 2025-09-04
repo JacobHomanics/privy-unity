@@ -472,6 +472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afe1bf25d705473a9bfa83b612194bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  createWalletOnLogin: 0
   onSuccess:
     m_PersistentCalls:
       m_Calls:
@@ -528,6 +529,42 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
+        m_CallState: 2
+  onLoginWithCodeSuccess:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1795410783}
+        m_TargetAssemblyTypeName: EmailCodeHandler, Assembly-CSharp
+        m_MethodName: OnSuccess
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onLoginWithCodeFailure:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoginWithCodeError:
+    m_PersistentCalls:
+      m_Calls: []
+  onLoginWithCodeCaughtError:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1795410783}
+        m_TargetAssemblyTypeName: EmailCodeHandler, Assembly-CSharp
+        m_MethodName: OnCaughtError
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
         m_CallState: 2
 --- !u!4 &137667785
 Transform:
@@ -5347,10 +5384,10 @@ MonoBehaviour:
       - m_Target: {fileID: 1762022131}
         m_TargetAssemblyTypeName: SendCodeBtn, Assembly-CSharp
         m_MethodName: SendCode
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 713712521}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5369,7 +5406,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 137667784}
-  email: {fileID: 713712521}
 --- !u!1 &1795410778
 GameObject:
   m_ObjectHideFlags: 0
@@ -5564,6 +5600,8 @@ MonoBehaviour:
   emailInputField: {fileID: 713712521}
   codeInputField: {fileID: 1795410780}
   userWalletText: {fileID: 1853633267}
+  controller: {fileID: 137667784}
+  messageText: {fileID: 1486282278}
   onCodeEntered:
     m_PersistentCalls:
       m_Calls:
@@ -5579,8 +5617,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  controller: {fileID: 137667784}
-  onSuccess:
+  onDelaySuccess:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 836207031}
@@ -5607,13 +5644,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  onFailure:
-    m_PersistentCalls:
-      m_Calls: []
-  onError:
-    m_PersistentCalls:
-      m_Calls: []
-  messageText: {fileID: 1486282278}
 --- !u!1 &1853633265
 GameObject:
   m_ObjectHideFlags: 0
