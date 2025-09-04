@@ -4,7 +4,7 @@ using System.IO;
 
 public class EmptyJsonFileCreator : ScriptableObject
 {
-    [MenuItem("Assets/Create/Empty JSON File")]
+    [MenuItem("Assets/Create/Privy Config")]
     public static void CreateEmptyJsonFile()
     {
         // Get the currently selected folder in the Project window
@@ -23,7 +23,7 @@ public class EmptyJsonFileCreator : ScriptableObject
         }
 
         // Create a unique filename
-        string fileName = "EmptyJsonFile";
+        string fileName = "PrivyConfig";
         string filePath = Path.Combine(selectedPath, fileName + ".json");
 
         // Ensure the filename is unique
