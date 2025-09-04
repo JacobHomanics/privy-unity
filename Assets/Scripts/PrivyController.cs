@@ -69,7 +69,4 @@ public class PrivyController : MonoBehaviour
 
         }
     }
-
-    public string clientId;
-
 }
