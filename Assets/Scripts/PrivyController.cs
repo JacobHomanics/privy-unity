@@ -21,8 +21,7 @@ public class PrivyController : MonoBehaviour
 
     public UnityEvent onError;
 
-
-    void Start()
+    void Awake()
     {
         env.TryParseEnvironmentVariable("PRIVY_APP_ID", out string appId);
         env.TryParseEnvironmentVariable("PRIVY_WEB_CLIENT_ID", out string webClientId);
