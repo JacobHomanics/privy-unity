@@ -9,6 +9,10 @@ public class PrivyController : MonoBehaviour
     [Header("Configuration")]
     public bool createWalletOnLogin;
 
+    public string appId;
+    public string mobileClientId;
+    public string webClientId;
+
     [Header("Events")]
 
     public UnityEvent onInitialize;
@@ -19,10 +23,6 @@ public class PrivyController : MonoBehaviour
     public UnityEvent<string> onSendCodeCaughtError;
 
     public UnityEvent onError;
-
-    public string appId;
-    public string mobileClientId;
-    public string webClientId;
 
     void Awake()
     {
