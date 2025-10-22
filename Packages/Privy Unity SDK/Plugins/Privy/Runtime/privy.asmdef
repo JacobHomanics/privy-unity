@@ -1,8 +1,8 @@
 {
-    "name": "privyunity",
+    "name": "privy",
     "rootNamespace": "",
     "references": [
-        "GUID:b66a68c1c1f41425ea0802e2bec22357"
+        "GUID:75b040f40645d40938d146ddb06b3b4f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
