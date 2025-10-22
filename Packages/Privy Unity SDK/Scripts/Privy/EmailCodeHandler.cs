@@ -1,19 +1,19 @@
 using System.Collections;
 using Privy;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class EmailCodeHandler : MonoBehaviour
 {
     private static WaitForSeconds _waitForSeconds1 = new(1f);
-    public TMP_InputField emailInputField;
-    public TMP_InputField codeInputField;
-    public TMP_Text userWalletText;
+    public InputField emailInputField;
+    public InputField codeInputField;
+    public Text userWalletText;
 
     public PrivyController controller;
 
-    public TMP_Text messageText;
+    public Text messageText;
 
     public UnityEvent onCodeEntered;
 

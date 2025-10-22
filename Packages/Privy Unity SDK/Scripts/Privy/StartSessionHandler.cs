@@ -1,5 +1,4 @@
 using Privy;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 

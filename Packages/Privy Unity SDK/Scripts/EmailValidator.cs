@@ -1,14 +1,13 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EmailValidator : MonoBehaviour
 {
-    public TMP_Text submitText;
+    public Text submitText;
     public Color validColor;
     public Color invalidColor;
 
-    public TMP_Text text;
+    public Text text;
 
     void Update()
     {

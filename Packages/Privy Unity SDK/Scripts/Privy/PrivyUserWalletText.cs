@@ -1,11 +1,11 @@
 using UnityEngine;
 using Privy;
-using TMPro;
 using System;
+using UnityEngine.UI;
 
 public class PrivyUserWalletText : MonoBehaviour
 {
-    public TMP_Text text;
+    public Text text;
     public bool throwErrorOnInstanceInitialize;
 
     async void Update()

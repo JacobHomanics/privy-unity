@@ -1,13 +1,13 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class ResendCodeBtn : MonoBehaviour
 {
     public float toggleTime = 5f;
     public PrivyController controller;
-    public TMP_InputField emailText;
+    public InputField emailText;
 
     public UnityEvent onToggleEnd;
 

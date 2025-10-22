@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using Privy;
 
 /// <summary>
@@ -14,15 +13,15 @@ public class SmartContractExample : MonoBehaviour
     public Button getBalanceButton;
     public Button transferTokensButton;
 
-    public TMP_InputField contractAddressField;
-    public TMP_InputField functionDataField;
-    public TMP_InputField valueField;
-    public TMP_InputField recipientAddressField;
-    public TMP_InputField tokenAmountField;
+    public InputField contractAddressField;
+    public InputField functionDataField;
+    public InputField valueField;
+    public InputField recipientAddressField;
+    public InputField tokenAmountField;
 
-    public TMP_Text resultText;
-    public TMP_Text walletAddressText;
-    public TMP_Text balanceText;
+    public Text resultText;
+    public Text walletAddressText;
+    public Text balanceText;
 
     private PrivyController privyController;
 

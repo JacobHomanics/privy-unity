@@ -1,11 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Privy;
-using TMPro;
 using System;
 
 public class PrivyUserIdText : MonoBehaviour
 {
-    public TMP_Text text;
+    public Text text;
 
     public bool throwErrorOnInstanceInitialize;
 

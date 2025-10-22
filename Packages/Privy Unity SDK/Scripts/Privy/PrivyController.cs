@@ -1,7 +1,6 @@
 using UnityEngine;
 using Privy;
 using System.Threading.Tasks;
-using CandyCoded.env;
 using System;
 using UnityEngine.Events;
 
@@ -21,12 +20,12 @@ public class PrivyController : MonoBehaviour
 
     public UnityEvent onError;
 
+    public string appId;
+    public string mobileClientId;
+    public string webClientId;
+
     void Awake()
     {
-        env.TryParseEnvironmentVariable("PRIVY_APP_ID", out string appId);
-        env.TryParseEnvironmentVariable("PRIVY_WEB_CLIENT_ID", out string webClientId);
-        env.TryParseEnvironmentVariable("PRIVY_MOBILE_CLIENT_ID", out string mobileClientId);
-
         var config = new PrivyConfig
         {
             AppId = appId,
@@ -34,7 +33,7 @@ public class PrivyController : MonoBehaviour
             ClientId = mobileClientId
 
 #elif UNITY_WEBGL
-            ClientId = webClientId
+                ClientId = webClientId
 #endif
         };
 
@@ -50,27 +49,27 @@ public class PrivyController : MonoBehaviour
     }
 
     readonly PrivyExceptionHandlerData[] privySendCodeExceptionHandlersData = new PrivyExceptionHandlerData[]{
-        new() {
-            identifier = "has not been set as an allowed app identifier in the Privy dashboard",
-            message = "Please add the app identifier to the Privy dashboard.",
-            type = "LogWarning"
-        },
-        new() {
-            identifier = "Invalid Privy app ID",
-            message = "Invalid Privy app ID.",
-            type = "LogWarning"
-        },
-        new() {
-            identifier = "Invalid app client ID",
-            message = "Invalid App Client ID.",
-            type = "LogWarning"
-        },
-        new() {
-            identifier = "Invalid email address",
-            message = "Invalid Email Address.",
-            type = "CaughtEvent"
-        }
-    };
+            new() {
+                identifier = "has not been set as an allowed app identifier in the Privy dashboard",
+                message = "Please add the app identifier to the Privy dashboard.",
+                type = "LogWarning"
+            },
+            new() {
+                identifier = "Invalid Privy app ID",
+                message = "Invalid Privy app ID.",
+                type = "LogWarning"
+            },
+            new() {
+                identifier = "Invalid app client ID",
+                message = "Invalid App Client ID.",
+                type = "LogWarning"
+            },
+            new() {
+                identifier = "Invalid email address",
+                message = "Invalid Email Address.",
+                type = "CaughtEvent"
+            }
+        };
 
     public async Task SendCode(string email)
     {
@@ -114,12 +113,12 @@ public class PrivyController : MonoBehaviour
     public UnityEvent<string> onLoginWithCodeCaughtError;
 
     readonly PrivyExceptionHandlerData[] privyLoginWithCodeExceptionHandlersData = new PrivyExceptionHandlerData[]{
-        new() {
-            identifier = "Invalid email and code combination",
-            message = "Invalid or expired verification code.",
-            type = "CaughtEvent"
-        }
-    };
+            new() {
+                identifier = "Invalid email and code combination",
+                message = "Invalid or expired verification code.",
+                type = "CaughtEvent"
+            }
+        };
 
     public async Task LoginWithCode(string email, string code)
     {

@@ -1,10 +1,10 @@
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PleaseCheckEmail : MonoBehaviour
 {
-    public TMP_InputField emailInputField;
-    public TMP_Text emailText;
+    public InputField emailInputField;
+    public Text emailText;
 
 
     void Update()
