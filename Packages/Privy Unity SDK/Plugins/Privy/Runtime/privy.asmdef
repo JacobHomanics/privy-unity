@@ -2,7 +2,7 @@
     "name": "privy",
     "rootNamespace": "",
     "references": [
-        "GUID:75b040f40645d40938d146ddb06b3b4f"
+        "unity-webview"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

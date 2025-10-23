@@ -2,7 +2,7 @@
     "name": "privyunity",
     "rootNamespace": "",
     "references": [
-        "GUID:b66a68c1c1f41425ea0802e2bec22357"
+        "privy"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
