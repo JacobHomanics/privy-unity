@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class PrivyUserWalletText : MonoBehaviour
 {
     public Text text;
-    public bool throwErrorOnInstanceInitialize;
 
     async void Update()
     {
@@ -19,10 +18,7 @@ public class PrivyUserWalletText : MonoBehaviour
         {
             if (e.Message == "Call PrivyManager.Initialize before attempting to get the Privy instance.")
             {
-                if (throwErrorOnInstanceInitialize)
-                {
-                    Debug.LogError(e.Message);
-                }
+                Debug.LogError(e.Message);
             }
         }
     }

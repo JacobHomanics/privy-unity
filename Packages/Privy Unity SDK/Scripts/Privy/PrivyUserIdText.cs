@@ -7,8 +7,6 @@ public class PrivyUserIdText : MonoBehaviour
 {
     public Text text;
 
-    public bool throwErrorOnInstanceInitialize;
-
     async void Update()
     {
         try
@@ -20,10 +18,7 @@ public class PrivyUserIdText : MonoBehaviour
         {
             if (e.Message == "Call PrivyManager.Initialize before attempting to get the Privy instance.")
             {
-                if (throwErrorOnInstanceInitialize)
-                {
-                    Debug.LogError(e.Message);
-                }
+                Debug.LogError(e.Message);
             }
         }
     }

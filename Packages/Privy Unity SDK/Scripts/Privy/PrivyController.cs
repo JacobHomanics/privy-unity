@@ -362,16 +362,24 @@ public class PrivyController : MonoBehaviour
     {
         try
         {
+            Debug.Log("AYE1");
             PrivyUser privyUser = await PrivyManager.Instance.GetUser();
+            Debug.Log("AYE2");
             IEmbeddedEthereumWallet embeddedWallet = privyUser.EmbeddedWallets[0];
+
+            Debug.Log("AYE3");
 
             var rpcRequest = new RpcRequest
             {
                 Method = "eth_getBalance",
                 Params = new string[] { embeddedWallet.Address, "latest" }
             };
+            Debug.Log("AYE4");
+
 
             RpcResponse response = await embeddedWallet.RpcProvider.Request(rpcRequest);
+            Debug.Log("AYE5");
+
             return response.Data;
         }
         catch (Exception ex)
