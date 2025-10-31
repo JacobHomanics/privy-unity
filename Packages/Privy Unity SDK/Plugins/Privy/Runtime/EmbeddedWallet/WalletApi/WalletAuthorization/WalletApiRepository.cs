@@ -114,12 +114,18 @@ namespace Privy
 
             for (var i = 0; i < request.chain.Length; i++)
             {
+                var chainQuery = string.Empty;
+
                 var end = string.Empty;
 
                 if (request.chain.Length > 1 && i != request.chain.Length - 1)
                     end = "&";
 
-                queryString += $"chain={request.chain[i]}{end}";
+                if (request.chain[i] == Chain.base_mainnet)
+                    chainQuery = "base";
+                else
+                    chainQuery = request.chain[i].ToString();
+                queryString += $"chain={chainQuery}{end}";
             }
 
             if (request.include_currency == IncludeCurrency.usd)

@@ -7,6 +7,9 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
 {
     public Text text;
 
+    public Asset asset;
+    public Chain chain;
+
     public async void SetText()
     {
         try
@@ -14,23 +17,7 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
             PrivyUser privyUser = await PrivyManager.Instance.GetUser();
             IEmbeddedEthereumWallet embeddedWallet = privyUser.EmbeddedWallets[0];
 
-            var assets = new Asset[2];
-            assets[0] = Asset.eth;
-            assets[1] = Asset.usdc;
-
-            var chains = new Chain[2];
-            chains[0] = Chain.ethereum;
-            chains[1] = Chain.optimism;
-
-            var results = await privyUser.GetWalletBalance(privyUser.EmbeddedWallets[0].Id, assets, chains, IncludeCurrency.usd);
-
-            for (var i = 0; i < results.balances.Length; i++)
-            {
-                Debug.Log(results.balances[i].chain);
-                Debug.Log(results.balances[i].asset);
-                Debug.Log(results.balances[i].raw_value);
-                Debug.Log(results.balances[i].raw_value_decimals);
-            }
+            var results = await privyUser.GetWalletBalance(privyUser.EmbeddedWallets[0].Id, new Asset[1] { asset }, new Chain[1] { chain }, IncludeCurrency.usd);
 
             /////////////////////////////////
             // Keep in case we want to implement a method like this: 
@@ -55,7 +42,35 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
             // text.text = result;
 
             // var balance = await controller.GetBalance();
-            // text.text = balance;
+
+            text.text = $"{results.balances[0].raw_value} {asset}";
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+            if (e.Message == "Call PrivyManager.Initialize before attempting to get the Privy instance.")
+            {
+                Debug.LogError(e.Message);
+            }
+        }
+    }
+
+    public async void SetText(string asset, string chain)
+    {
+        try
+        {
+            PrivyUser privyUser = await PrivyManager.Instance.GetUser();
+            IEmbeddedEthereumWallet embeddedWallet = privyUser.EmbeddedWallets[0];
+
+            if (!Enum.TryParse(asset, out Asset assetEnum))
+                Debug.LogError("Unable to parse asset enum");
+
+            if (!Enum.TryParse(chain, out Chain chainEnum))
+                Debug.LogError("Unable to parse chain enum");
+
+            var results = await privyUser.GetWalletBalance(privyUser.EmbeddedWallets[0].Id, new Asset[1] { assetEnum }, new Chain[1] { chainEnum }, IncludeCurrency.usd);
+
+            text.text = "";
         }
         catch (Exception e)
         {
