@@ -99,19 +99,14 @@ namespace Privy
             client.DefaultRequestHeaders.Add(Constants.PRIVY_APP_ID_HEADER, _privyConfig.AppId);
 
             var queryString = string.Empty;
-            //HttpUtility.ParseQueryString(string.Empty);
 
             for (var i = 0; i < request.asset.Length; i++)
             {
                 var end = string.Empty;
-                if ((request.asset.Length > 1 && i != request.asset.Length - 1)) //|| (i == request.asset.Length - 1 && request.chain.Length > 0))
-                {
+                if (request.asset.Length > 1 && i != request.asset.Length - 1)
                     end = "&";
-                }
 
                 queryString += $"asset={request.asset[i]}{end}";
-                // queryString.Add("asset", request.asset[i].ToString());
-                // query["asset"] += request.asset[i].ToString() + "&";
             }
 
             if (request.chain.Length > 0)
@@ -120,35 +115,16 @@ namespace Privy
             for (var i = 0; i < request.chain.Length; i++)
             {
                 var end = string.Empty;
-                var condition1 = (request.chain.Length > 1 && i != request.chain.Length - 1);
-                // var condition2 = (i == request.chain.Length - 1 && request.include_currency == IncludeCurrency.usd);
-                UnityEngine.Debug.Log("cond 1: " + condition1);
-                // UnityEngine.Debug.Log("cond 2: " + condition2);
 
-
-                if (condition1)// || condition2)
-                {
+                if (request.chain.Length > 1 && i != request.chain.Length - 1)
                     end = "&";
-                }
 
                 queryString += $"chain={request.chain[i]}{end}";
-
-                // queryString.Add("chain", request.chain[i].ToString());
-                // query["chain"] += request.chain[i].ToString() + "&";
             }
 
             if (request.include_currency == IncludeCurrency.usd)
-            {
                 queryString += "&include_currency=usd";
-            }
 
-            HttpUtility.UrlEncode(queryString);
-
-
-            // if (request.include_currency == WalletBalanceApiRequest.IncludeCurrency.usd)
-            //     query["include_currency"] = request.include_currency.ToString();
-
-            UnityEngine.Debug.Log(queryString);
 
             var endPointUrl = $"wallets/{walletId}/balance?";
 
