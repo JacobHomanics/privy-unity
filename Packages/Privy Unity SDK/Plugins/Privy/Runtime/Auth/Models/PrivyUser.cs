@@ -403,14 +403,14 @@ namespace Privy
             return await PrepareAndConnectSolanaWallet(hdWalletAddress);
         }
 
-        public async Task<WalletApiBalanceResponse> GetWalletBalance(string walletId)
+        public async Task<WalletApiBalanceResponse> GetWalletBalance(string walletId, Asset[] assets, Chain[] chains, IncludeCurrency include_currency = IncludeCurrency.none)
         {
             var accessToken = await _authDelegator.GetAccessToken();
 
             var accounts = _authDelegator.GetAuthSession().User.LinkedAccounts;
             var hasEthereumWallets = accounts.Any(account => account is PrivyEmbeddedWalletAccount);
 
-            var request = new WalletApiBalanceRequest { asset = WalletApiBalanceRequest.Asset.eth, chain = WalletApiBalanceRequest.Chain.ethereum, include_currency = WalletApiBalanceRequest.IncludeCurrency.usd };
+            var request = new WalletApiBalanceRequest { asset = assets, chain = chains, include_currency = include_currency };
 
             return await _walletApiRepository.GetWalletBalance(request, walletId, accessToken);
         }

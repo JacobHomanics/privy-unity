@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web;
@@ -96,17 +98,63 @@ namespace Privy
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
             client.DefaultRequestHeaders.Add(Constants.PRIVY_APP_ID_HEADER, _privyConfig.AppId);
 
-            var query = HttpUtility.ParseQueryString(string.Empty);
-            query["asset"] = request.asset.ToString();
-            query["chain"] = request.chain.ToString();
+            var queryString = string.Empty;
+            //HttpUtility.ParseQueryString(string.Empty);
+
+            for (var i = 0; i < request.asset.Length; i++)
+            {
+                var end = string.Empty;
+                if ((request.asset.Length > 1 && i != request.asset.Length - 1)) //|| (i == request.asset.Length - 1 && request.chain.Length > 0))
+                {
+                    end = "&";
+                }
+
+                queryString += $"asset={request.asset[i]}{end}";
+                // queryString.Add("asset", request.asset[i].ToString());
+                // query["asset"] += request.asset[i].ToString() + "&";
+            }
+
+            if (request.chain.Length > 0)
+                queryString += "&";
+
+            for (var i = 0; i < request.chain.Length; i++)
+            {
+                var end = string.Empty;
+                var condition1 = (request.chain.Length > 1 && i != request.chain.Length - 1);
+                // var condition2 = (i == request.chain.Length - 1 && request.include_currency == IncludeCurrency.usd);
+                UnityEngine.Debug.Log("cond 1: " + condition1);
+                // UnityEngine.Debug.Log("cond 2: " + condition2);
+
+
+                if (condition1)// || condition2)
+                {
+                    end = "&";
+                }
+
+                queryString += $"chain={request.chain[i]}{end}";
+
+                // queryString.Add("chain", request.chain[i].ToString());
+                // query["chain"] += request.chain[i].ToString() + "&";
+            }
+
+            if (request.include_currency == IncludeCurrency.usd)
+            {
+                queryString += "&include_currency=usd";
+            }
+
+            HttpUtility.UrlEncode(queryString);
+
+
             // if (request.include_currency == WalletBalanceApiRequest.IncludeCurrency.usd)
             //     query["include_currency"] = request.include_currency.ToString();
+
+            UnityEngine.Debug.Log(queryString);
 
             var endPointUrl = $"wallets/{walletId}/balance?";
 
             try
             {
-                var response = await client.GetAsync(endPointUrl + query);
+                var response = await client.GetAsync(endPointUrl + queryString);
                 string responseBody = await response.Content.ReadAsStringAsync();
                 var responseObj = JsonConvert.DeserializeObject<WalletApiBalanceResponse>(responseBody);
                 return responseObj;

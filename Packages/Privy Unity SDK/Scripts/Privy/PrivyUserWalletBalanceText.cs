@@ -14,7 +14,15 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
             PrivyUser privyUser = await PrivyManager.Instance.GetUser();
             IEmbeddedEthereumWallet embeddedWallet = privyUser.EmbeddedWallets[0];
 
-            var results = await privyUser.GetWalletBalance(privyUser.EmbeddedWallets[0].Id);
+            var assets = new Asset[2];
+            assets[0] = Asset.eth;
+            assets[1] = Asset.usdc;
+
+            var chains = new Chain[2];
+            chains[0] = Chain.ethereum;
+            chains[1] = Chain.optimism;
+
+            var results = await privyUser.GetWalletBalance(privyUser.EmbeddedWallets[0].Id, assets, chains, IncludeCurrency.usd);
 
             for (var i = 0; i < results.balances.Length; i++)
             {
