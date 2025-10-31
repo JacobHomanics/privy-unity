@@ -88,10 +88,10 @@ public class PrivyController : MonoBehaviour
                 if (e.Message.Contains(privySendCodeExceptionHandlersData[i].identifier))
                 {
                     if (privySendCodeExceptionHandlersData[i].type == "LogWarning")
-                        Debug.LogWarning(e.Message);
+                        Debug.LogWarning(privySendCodeExceptionHandlersData[i].message);
 
                     if (privySendCodeExceptionHandlersData[i].type == "CaughtEvent")
-                        onSendCodeCaughtError?.Invoke(privySendCodeExceptionHandlersData[i].identifier);
+                        onSendCodeCaughtError?.Invoke(privySendCodeExceptionHandlersData[i].message);
 
                     isErrorAccountedFor = true;
                     break;
