@@ -114,17 +114,17 @@ namespace Privy
 
             for (var i = 0; i < request.chain.Length; i++)
             {
-                var chainQuery = string.Empty;
-
                 var end = string.Empty;
 
                 if (request.chain.Length > 1 && i != request.chain.Length - 1)
                     end = "&";
 
+                string chainQuery;
                 if (request.chain[i] == Chain.base_mainnet)
                     chainQuery = "base";
                 else
                     chainQuery = request.chain[i].ToString();
+
                 queryString += $"chain={chainQuery}{end}";
             }
 

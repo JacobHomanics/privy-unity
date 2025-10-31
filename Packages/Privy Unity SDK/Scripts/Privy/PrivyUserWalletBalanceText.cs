@@ -17,7 +17,16 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
             PrivyUser privyUser = await PrivyManager.Instance.GetUser();
             IEmbeddedEthereumWallet embeddedWallet = privyUser.EmbeddedWallets[0];
 
+            Debug.Log(privyUser.EmbeddedWallets[0].Address);
+
             var results = await privyUser.GetWalletBalance(privyUser.EmbeddedWallets[0].Id, new Asset[1] { asset }, new Chain[1] { chain }, IncludeCurrency.usd);
+
+            long.TryParse(results.balances[0].raw_value, out long a);
+            long.TryParse(results.balances[0].raw_value_decimals, out long b);
+
+            float result = a / (float)Math.Pow(10, b);
+
+            text.text = $"{result} {asset}";
 
             /////////////////////////////////
             // Keep in case we want to implement a method like this: 
@@ -42,8 +51,6 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
             // text.text = result;
 
             // var balance = await controller.GetBalance();
-
-            text.text = $"{results.balances[0].raw_value} {asset}";
         }
         catch (Exception e)
         {
@@ -80,10 +87,5 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
                 Debug.LogError(e.Message);
             }
         }
-    }
-
-    async void Update()
-    {
-
     }
 }
