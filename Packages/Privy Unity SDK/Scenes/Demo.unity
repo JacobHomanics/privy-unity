@@ -171,6 +171,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: Privy
       objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: appId
+      value: cmhe5pt9y00i5l10dh8u93anw
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: webClientId
+      value: client-WY6STci7doN2vmUwBppVSZRq5D5sMxTPDjrcYfccHBTZU
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: mobileClientId
+      value: client-WY6STci7doN2vmUwBppVSZRq5D5sMxTPDjqGwLQV32kU8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: onInitialize.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: onInitialize.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: onInitialize.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 686018206}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: onInitialize.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: onInitialize.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SetText
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: onInitialize.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: PrivyUserWalletBalanceText, privyunity
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+      propertyPath: onInitialize.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -434,6 +474,17 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 1
+--- !u!114 &686018206 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6788397534472691593, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
+  m_PrefabInstance: {fileID: 253360759}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18c10ec6e035f4c4ba60e7280371847a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using Newtonsoft.Json;
 
 namespace Privy
@@ -81,6 +83,62 @@ namespace Privy
                 throw new PrivyException.EmbeddedWalletException($"Failed to execute RPC: {errorResponse.Message}",
                     EmbeddedWalletError.RpcRequestFailed);
             }
+        }
+
+        public async Task<WalletApiBalanceResponse> GetWalletBalance(WalletApiBalanceRequest request, string walletId, string accessToken)
+        {
+            var baseURL = "https://api.privy.io/v1/";
+            HttpClient client = new()
+            {
+                BaseAddress = new Uri(baseURL)
+            };
+
+            client.DefaultRequestHeaders.Add("Authorization", $"Bearer {accessToken}");
+            client.DefaultRequestHeaders.Add(Constants.PRIVY_APP_ID_HEADER, _privyConfig.AppId);
+
+            var query = HttpUtility.ParseQueryString(string.Empty);
+            query["asset"] = request.asset.ToString();
+            query["chain"] = request.chain.ToString();
+            // if (request.include_currency == WalletBalanceApiRequest.IncludeCurrency.usd)
+            //     query["include_currency"] = request.include_currency.ToString();
+
+            var endPointUrl = $"wallets/{walletId}/balance?";
+
+            try
+            {
+                var response = await client.GetAsync(endPointUrl + query);
+                string responseBody = await response.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<WalletApiBalanceResponse>(responseBody);
+                return responseObj;
+            }
+            catch (Exception errorResponse)
+            {
+                throw new PrivyException.EmbeddedWalletException($"Failed to execute RPC: {errorResponse.Message}",
+                    EmbeddedWalletError.RpcRequestFailed);
+            }
+
+            // var headers = new Dictionary<string, string>
+            // {
+            //     { "Authorization", $"Bearer {accessToken}" },
+            //     { Constants.PRIVY_APP_ID_HEADER, _privyConfig.AppId }
+            // };
+
+            // string serializedRequest = JsonConvert.SerializeObject(request);
+
+            // try
+            // {
+            //     string jsonResponse =
+            //         await _httpRequestHandler.SendRequestAsync($"wallets/{walletId}/balance", serializedRequest,
+            //             customHeaders: headers, method: "GET");
+
+            //     var response = JsonConvert.DeserializeObject<object[]>(jsonResponse);
+            //     return response;
+            // }
+            // catch (Exception errorResponse)
+            // {
+            //     throw new PrivyException.EmbeddedWalletException($"Failed to execute RPC: {errorResponse.Message}",
+            //         EmbeddedWalletError.RpcRequestFailed);
+            // }
         }
     }
 }
