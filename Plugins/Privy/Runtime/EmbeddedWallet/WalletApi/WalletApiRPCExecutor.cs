@@ -37,6 +37,23 @@ namespace Privy
                 WalletApiRpcRequest walletApiRequest;
                 switch (ethereumRequest.Method)
                 {
+                    case "eth_call":
+                        if (!(requestParams.Length == 1 && !string.IsNullOrEmpty(requestParams[0])))
+                        {
+                            throw new PrivyException.EmbeddedWalletException(
+                                "The params array should be [transaction]",
+                                EmbeddedWalletError.RpcRequestFailed);
+                        }
+
+                        walletApiRequest = WalletApiRpcRequest.EthereumCallTransaction(
+                            WalletApiEthereumCallTransactionRpcParams.FromString(requestParams[0])
+                        );
+                        response = await _walletApiRepository.Rpc(walletApiRequest, _walletId, accessToken);
+                        return new EthereumRpcResponseDetails()
+                        {
+                            Method = response.Method,
+                            Data = ((WalletApiEthereumCallTransactionRpcResponse)response.Data).Hash
+                        };
                     case "personal_sign":
                         if (!(requestParams.Length == 2 && !string.IsNullOrEmpty(requestParams[0])))
                         {

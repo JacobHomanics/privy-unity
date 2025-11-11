@@ -38,6 +38,10 @@ namespace Privy
             WalletApiEthereumSignTransactionRpcParams parameters) =>
             new("eth_signTransaction", parameters);
 
+        internal static WalletApiRpcRequest EthereumCallTransaction(
+        WalletApiEthereumCallTransactionRpcParams parameters) =>
+        new("eth_call", parameters);
+
         internal static WalletApiRpcRequest SolanaSignMessage(WalletApiSolanaSignMessageRpcParams parameters) =>
             new("signMessage", parameters);
     }

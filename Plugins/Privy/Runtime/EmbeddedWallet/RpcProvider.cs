@@ -16,7 +16,8 @@ namespace Privy
             "eth_populateTransactionRequest",
             "eth_signTypedData_v4",
             "eth_signTransaction",
-            "eth_sendTransaction"
+            "eth_sendTransaction",
+            "eth_call"
         };
 
         public RpcProvider(IRpcExecutor rpcExecutor)
