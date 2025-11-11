@@ -82,6 +82,8 @@ namespace Privy
             }
             catch (Exception errorResponse)
             {
+                UnityEngine.Debug.Log("AYE YO");
+                UnityEngine.Debug.Log(request.Params.ToString());
                 throw new PrivyException.EmbeddedWalletException($"Failed to execute RPC: {errorResponse.Message}",
                     EmbeddedWalletError.RpcRequestFailed);
             }

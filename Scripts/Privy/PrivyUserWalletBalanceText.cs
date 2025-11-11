@@ -10,6 +10,7 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
     public Asset asset;
     public Chain chain;
 
+    [ContextMenu("Set")]
     public async void SetText()
     {
         try

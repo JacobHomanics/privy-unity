@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Privy
@@ -292,10 +293,13 @@ namespace Privy
 
         internal async Task<byte[]> SignWithUserSigner(string accessToken, byte[] message)
         {
+            UnityEngine.Debug.Log(accessToken);
             var result = await _webViewManager.SignWithUserSigner(accessToken, message);
 
             if (result is IframeResponseError errorResponse)
             {
+                UnityEngine.Debug.Log(accessToken);
+
                 throw new PrivyException.EmbeddedWalletException(
                     $"Failed to sign with the user's authorization key: {errorResponse.Error.Message}",
                     EmbeddedWalletError.UserSignerRequestFailed);

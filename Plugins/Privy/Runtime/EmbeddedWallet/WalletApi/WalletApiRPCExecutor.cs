@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Threading.Tasks;
 using static Privy.RpcRequestData;
 using static Privy.RpcResponseData;
@@ -20,11 +21,18 @@ namespace Privy
 
         async Task<IRpcResponseDetails> IRpcExecutor.Evaluate(IRpcRequestDetails request)
         {
+
             string accessToken = await _authDelegator.GetAccessToken();
 
             if (request is EthereumRpcRequestDetails ethereumRequest)
             {
                 string[] requestParams = ethereumRequest.Params;
+                for (var i = 0; i < requestParams.Length; i++)
+                {
+                    UnityEngine.Debug.Log(requestParams[i]);
+                }
+
+
                 WalletApiRpcResponse response;
                 WalletApiRpcRequest walletApiRequest;
                 switch (ethereumRequest.Method)

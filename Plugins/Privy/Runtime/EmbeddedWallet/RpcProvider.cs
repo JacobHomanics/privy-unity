@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Privy
@@ -25,6 +26,9 @@ namespace Privy
 
         public async Task<RpcResponse> Request(RpcRequest request)
         {
+            for (var i = 0; i < request.Params.Length; i++)
+                UnityEngine.Debug.Log(request.Params[i]);
+
             if (_allowedMethods.Contains(request.Method))
             {
                 var requestDetails = new RpcRequestData.EthereumRpcRequestDetails
@@ -43,6 +47,7 @@ namespace Privy
                     };
                 }
 
+                UnityEngine.Debug.Log("UH OG");
                 throw new PrivyException.EmbeddedWalletException($"Failed to execute RPC Request",
                     EmbeddedWalletError.RpcRequestFailed);
             }
