@@ -13,7 +13,6 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
     [ContextMenu("Set")]
     public async void SetText()
     {
-        Debug.Log("ONE TWO");
         try
         {
             PrivyUser privyUser = await PrivyManager.Instance.GetUser();

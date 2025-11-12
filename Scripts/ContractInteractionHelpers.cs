@@ -37,13 +37,13 @@ public static class ContractInteractionHelpers
         public int id = 1;
     }
 
-    public static async Task<string> Call(string to, string data)
+    public static async Task<string> Call(string rpc, string to, string data)
     {
         // token contract on Base (replace with your actual contract)
         string token = to;
         string json = BuildEthCallJson(token, data);
 
-        string rpcUrl = "https://base.llamarpc.com";
+        string rpcUrl = rpc;
         using var client = new HttpClient();
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         var res = await client.PostAsync(rpcUrl, content);

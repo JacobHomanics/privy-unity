@@ -27,11 +27,6 @@ namespace Privy
             if (request is EthereumRpcRequestDetails ethereumRequest)
             {
                 string[] requestParams = ethereumRequest.Params;
-                for (var i = 0; i < requestParams.Length; i++)
-                {
-                    UnityEngine.Debug.Log(requestParams[i]);
-                }
-
 
                 WalletApiRpcResponse response;
                 WalletApiRpcRequest walletApiRequest;

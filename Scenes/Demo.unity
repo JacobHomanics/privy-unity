@@ -171,14 +171,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Privy
       objectReference: {fileID: 0}
-    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
-      propertyPath: appId
-      value: cmhv15nsg012zjv0dqvpd3ez6
-      objectReference: {fileID: 0}
-    - target: {fileID: 8778082561137330508, guid: 3f734b284628a402fb1edcb4b891f2e1, type: 3}
-      propertyPath: mobileClientId
-      value: client-WY6SX25ueTmnbbLCdjZKnLKEj5K3KKUsRLayKbmfepuCv
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

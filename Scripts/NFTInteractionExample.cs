@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Net.Http;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using Privy;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class NFTInteractionExample : MonoBehaviour
 {
@@ -23,11 +25,13 @@ public class NFTInteractionExample : MonoBehaviour
     [System.Serializable]
     public class CallValues
     {
+        public string rpc;
         public string to;
     }
 
     public CallValues callValues = new()
     {
+        rpc = "https://base.llamarpc.com",
         to = "0x2974cdd03d02c3027ad58c5d9e530cd4b5534b0e"
     };
 
@@ -43,6 +47,9 @@ public class NFTInteractionExample : MonoBehaviour
     public UnityEvent<string> OnSign;
     public UnityEvent<string> OnSend;
 
+    public GameObject go;
+    public Text text;
+
     public async void Call()
     {
         var user = await PrivyManager.Instance.GetUser();
@@ -50,7 +57,7 @@ public class NFTInteractionExample : MonoBehaviour
         // Encode balanceOf(address) function call with user's wallet address
         string balanceOfData = SmartContractHelper.CreateERC20BalanceOfData(user.EmbeddedWallets[0].Address);
 
-        var hash = await ContractInteractionHelpers.Call(callValues.to, balanceOfData);
+        var hash = await ContractInteractionHelpers.Call(callValues.rpc, callValues.to, balanceOfData);
 
         string hex = ExtractResultHex(hash);
 
@@ -58,7 +65,10 @@ public class NFTInteractionExample : MonoBehaviour
         {
             BigInteger balance = ParseRpcUint256(hex);
             OnBalanceOf?.Invoke((int)balance);
-            // Debug.Log($"Balance: {balance}");
+
+            go.SetActive((int)balance > 0);
+            text.text = ((int)balance).ToString();
+            Debug.Log("Called");
         }
     }
 
@@ -74,8 +84,16 @@ public class NFTInteractionExample : MonoBehaviour
     {
         var user = await PrivyManager.Instance.GetUser();
         var hash = await ContractInteractionHelpers.Send(user.EmbeddedWallets[0], signOrSendValues.to, signOrSendValues.value, signOrSendValues.chain, signOrSendValues.data);
+
         OnSend?.Invoke(hash);
         Debug.Log(hash);
+        StartCoroutine(Wait());
+    }
+
+    private IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(3f);
+        Call();
     }
 
     static BigInteger ParseRpcUint256(string hex)
