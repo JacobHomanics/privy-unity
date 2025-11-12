@@ -4617,8 +4617,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   createWalletOnLogin: 1
-  appId: cmhe5pt9y00i5l10dh8u93anw
-  mobileClientId: client-WY6STci7doN2vmUwBppVSZRq5D5sMxTPDjqGwLQV32kU8
+  appId: cmhv15nsg012zjv0dqvpd3ez6
+  mobileClientId: client-WY6SX25ueTmnbbLCdjZKnLKEj5K3KKUsRLayKbmfepuCv
   webClientId: client-WY6STci7doN2vmUwBppVSZRq5D5sMxTPDjrcYfccHBTZU
   onInitialize:
     m_PersistentCalls:
