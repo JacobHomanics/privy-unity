@@ -68,7 +68,6 @@ public class NFTInteractionExample : MonoBehaviour
 
             go.SetActive((int)balance > 0);
             text.text = ((int)balance).ToString();
-            Debug.Log("Called");
         }
     }
 

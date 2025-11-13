@@ -53,7 +53,6 @@ public class PrivyUserWalletBalanceText : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e);
             if (e.Message == "Call PrivyManager.Initialize before attempting to get the Privy instance.")
             {
                 Debug.LogError(e.Message);
